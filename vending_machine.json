@@ -1,0 +1,20 @@
+{
+  "Balance": 210,
+  "ItemList": [
+    {
+      "Name": "dwhj",
+      "Price": 32,
+      "Stock": 49
+    },
+    {
+      "Name": "pivo",
+      "Price": 210,
+      "Stock": 20
+    },
+    {
+      "Name": "vodka",
+      "Price": 1000,
+      "Stock": 34
+    }
+  ]
+}
