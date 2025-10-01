@@ -46,6 +46,16 @@ class Product
     {
         Stock -= 1;
         change = Math.Abs(change);
+        List<int> change_coins = new List<int>();
+        int[] nominals = { 10, 5, 2, 1 };
+        foreach (int i in nominals)
+        {
+            while (change >= i)
+            {
+                change_coins.Add(i);
+                change -= i;
+            }
+        }
         machine.Balance += Price + change;
         if (Stock == 0)
         {
@@ -55,7 +65,7 @@ class Product
         machine.SaveToFile();
         if (machine.Balance >= change)
         {
-            Console.WriteLine($"\nhere's your {Name} ({Stock} left) and change ({change}), bye!");
+            Console.WriteLine($"\nhere's your {Name} ({Stock} left) and change ({string.Join(", ", change_coins)}), bye!");
             machine.Balance -= change;
             machine.SaveToFile();
             Environment.Exit(0);
