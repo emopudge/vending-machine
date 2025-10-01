@@ -46,17 +46,7 @@ class Product
     {
         Stock -= 1;
         change = Math.Abs(change);
-        List<int> change_coins = new List<int>();
-        int[] nominals = { 10, 5, 2, 1 };
-        foreach (int i in nominals)
-        {
-            while (change >= i)
-            {
-                change_coins.Add(i);
-                change -= i;
-            }
-        }
-        machine.Balance += Price + change;
+        machine.Balance += Price + change;        
         if (Stock == 0)
         {
             machine.ItemList.Remove(this);
@@ -65,6 +55,16 @@ class Product
         machine.SaveToFile();
         if (machine.Balance >= change)
         {
+            List<int> change_coins = new List<int>();
+            int[] nominals = { 10, 5, 2, 1 };
+            foreach (int i in nominals)
+            {
+                while (change >= i)
+                {
+                    change_coins.Add(i);
+                    change -= i;
+                }
+            }
             Console.WriteLine($"\nhere's your {Name} ({Stock} left) and change ({string.Join(", ", change_coins)}), bye!");
             machine.Balance -= change;
             machine.SaveToFile();
@@ -147,7 +147,7 @@ class VendingMachine
         string answer = Console.ReadLine();
         while (answer == "1")
         {
-            Console.WriteLine("tell me the name, price and stock (up to 255 pcs.) of the product you wanna put in. like this:\ncola 120 10");
+            Console.WriteLine("\ntell me the name, price and stock (up to 255 pcs.) of the product you wanna put in. like this:\ncola 120 10");
             string item = Console.ReadLine();
             string[] splitted = item.Split(' ', 3);
             try
@@ -157,7 +157,7 @@ class VendingMachine
                 Console.WriteLine("\nokay! now the machine has ");
                 for (int i = 0; i < ItemList.Count; i++)
                 {
-                    Console.WriteLine($"{ItemList[i].Name}, {ItemList[i].Price} rub., {ItemList[i].Stock} pcs.");
+                    Console.WriteLine($"{i}. {ItemList[i].Name}, {ItemList[i].Price} rub., {ItemList[i].Stock} pcs.");
                 }
             }
             catch
@@ -228,18 +228,23 @@ class VendingMachine
                             List<int> nums = spl.Select(int.Parse).ToList();
                             change += nums.Sum();
                         }
-                        if (change >= 0)
-                        {
-                            ItemList[answer].BeBought(this, change);
-                        }
                     }
+                    if (change >= 0)
+                    {
+                        ItemList[answer].BeBought(this, change);
+                    }                    
                 }
                 catch
                 {
                     Console.WriteLine("wrong input format");
                     Environment.Exit(0);
-                }       
-}
+                }
+            }
+            else
+            {
+                Console.WriteLine("sorry, I don't have such an item");
+                Environment.Exit(0);
+            }
         }
         else { Console.WriteLine("nothing:(\n"); }
     }
